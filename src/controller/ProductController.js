@@ -31,7 +31,40 @@ const getBestSellerProduct = async (req, res) => {
     }
 }
 
+const getDetailProduct = async (req, res) => {
+    try {
+        const productId = req.params.id
+        if(!productName){
+            return res.status(200).json({
+                status: 'ERR',
+                message : 'khong co ten san pham'
+            })
+        }
+        const response = await ProductService.getDetailProduct(productId)
+        return res.status(200).json(response)
+    } catch (e) {
+        return res.status(404).json({
+            message: e
+        })
+    }
+}
+
+const getAllProduct = async (req, res) => {
+    try {
+        const {limit, page} = req.query
+        const response = await ProductService.getAllProduct(Number(limit)||8, Number(page)||0)
+        return res.status(200).json(response)
+    } catch (e) {
+        return res.status(404).json({
+            message: e
+        })
+    }
+}
+
+
 module.exports = {
     addProduct,
-    getBestSellerProduct
+    getBestSellerProduct,
+    getDetailProduct,
+    getAllProduct
 }

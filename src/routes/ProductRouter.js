@@ -4,5 +4,7 @@ const productController = require('../controller/ProductController')
 
 router.post('/addProduct',productController.addProduct)
 router.get('/bestProduct',productController.getBestSellerProduct)
+router.get('/detail/:id',productController.getDetailProduct)
+router.get('/getAllProduct',productController.getAllProduct)
 
 module.exports = router
