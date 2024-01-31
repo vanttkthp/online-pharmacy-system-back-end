@@ -131,9 +131,51 @@ const deleteUser = (id) => {
     })
 }
 
+const getAllUser = () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const listUser = await User.find()
+            const selectedData = listUser.map(user => ({
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                phone: user.phone
+            }));
+            resolve({
+                status: 'OK',
+                message: 'Success',
+                data: selectedData
+            })
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
+
+const getDetailUser= (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const choosedUser = await User.findOne({
+                _id: id
+            })
+            resolve({
+                status: 'OK',
+                message: 'Success',
+                data: choosedUser
+            })
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
+
+
+
 module.exports = {
     createUser,
     loginUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    getAllUser,
+    getDetailUser
 }
