@@ -2,9 +2,13 @@ const mongoose = require('mongoose')
 
 const productSchema = new mongoose.Schema(
     {
-        name: { type: String, required: true, unique: true },
+        name: { type: String, required: true, unique: true, text: true},
         image: [{ type: String, required: true }],
-        type: { type: String, required: true },// loại sản phẩm: thực phẩm chức năng, mĩ phẩm, thuốc,....
+        type: {
+            type1: {type: String, required:true},
+            type2: {type: String, required:true},
+            type3: {type: String, required:true}
+        },// loại sản phẩm: thực phẩm chức năng, mĩ phẩm, thuốc,....
         import_price: { type: Number, required: true },// giá nhập vào
         selling_price: { type: Number, required: true },// giá bán
         countInStock: { type: Number, required: true },// số lượng sản phẩm
@@ -30,5 +34,6 @@ const productSchema = new mongoose.Schema(
     }
 );
 const Product = mongoose.model('Product', productSchema);
+productSchema.index({ name: 'text' });
 
 module.exports = Product;

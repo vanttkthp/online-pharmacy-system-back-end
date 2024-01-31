@@ -34,7 +34,7 @@ const getBestSellerProduct = async (req, res) => {
 const getDetailProduct = async (req, res) => {
     try {
         const productId = req.params.id
-        if(!productName){
+        if(!productId){
             return res.status(200).json({
                 status: 'ERR',
                 message : 'khong co ten san pham'
@@ -49,10 +49,10 @@ const getDetailProduct = async (req, res) => {
     }
 }
 
-const getAllProduct = async (req, res) => {
+const searchProduct = async (req, res) => {
     try {
-        const {limit, page} = req.query
-        const response = await ProductService.getAllProduct(Number(limit)||8, Number(page)||0)
+        const {limit, page,sort,search} = req.query
+        const response = await ProductService.searchProduct(Number(limit)||8, Number(page)||0,sort,search)
         return res.status(200).json(response)
     } catch (e) {
         return res.status(404).json({
@@ -66,5 +66,5 @@ module.exports = {
     addProduct,
     getBestSellerProduct,
     getDetailProduct,
-    getAllProduct
+    searchProduct
 }
