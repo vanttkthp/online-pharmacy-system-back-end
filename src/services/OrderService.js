@@ -84,7 +84,31 @@ const createOrder = (newOrder) => {
     })
 }
 
+const getAllOrder = (userId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const listOrder = await Order.find({
+                user: userId
+            }).sort({createdAt: -1, updatedAt: -1})
+            if (listOrder === null) {
+                resolve({
+                    status: 'ERR',
+                    message: 'The order is not defined'
+                })
+            }
+            resolve({
+                status: 'OK',
+                message: 'SUCESSS',
+                data: listOrder
+            })
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
+
 
 module.exports = {
-    createOrder
+    createOrder,
+    getAllOrder
 }
