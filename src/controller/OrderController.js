@@ -56,9 +56,22 @@ const getOrderDetail = async (req, res) => {
     }
 }
 
+const getAllOrderAdmin = async (req, res) => {
+    try{
+        const {limit, page} = req.query
+        const response = await OrderService.getAllOrderAdmin(Number(limit)||12,Number(page)||0)
+        return res.status(200).json(response)
+    } catch (e){
+        return res.status(404).json({
+            message: e
+        })
+    }
+}
+
 
 module.exports = {
     createOrder,
     getAllOrder,
-    getOrderDetail
+    getOrderDetail,
+    getAllOrderAdmin
 }

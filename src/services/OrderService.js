@@ -130,8 +130,52 @@ const getOrderDetail = (orderId) => {
     })
 }
 
+const getAllOrderAdmin = (limit, page) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (limit <= 0 || page < 0) {
+                resolve({
+                    status: 'OK',
+                    message: 'limit và page không đúng',
+                });
+            }
+            const totalProduct = await Product.countDocuments();
+
+            // Tính số trang hiện tại
+            const totalPages = Math.ceil(totalProduct / limit);
+
+            // Kiểm tra xem trang hiện tại có hợp lệ không
+            if (page >= totalPages) {
+                throw new Error("Invalid page number");
+            }
+
+            const listOrder = await Order.find().limit(limit).skip(page*limit).sort({createdAt: -1, updatedAt: -1})
+            const selectedData = listOrder.map(order => ({
+                _id: order.id,
+                orderItems: order.orderItems.map(item => ({
+                    name: item.name,
+                    image: item.image,
+                    price: item.price,
+                    amount: item.amount
+                })),
+                totalPrice: order.totalPrice
+            }))
+            resolve({
+                status: 'OK',
+                message: 'SUCESSS',
+                data: selectedData
+            })
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
+
+
+
 module.exports = {
     createOrder,
     getAllOrder,
-    getOrderDetail
+    getOrderDetail,
+    getAllOrderAdmin
 }
