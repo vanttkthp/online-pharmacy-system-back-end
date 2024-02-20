@@ -68,10 +68,29 @@ const getAllOrderAdmin = async (req, res) => {
     }
 }
 
+const cancelOrder = async (req, res) => {
+    try{
+        const orderId = req.body.orderId
+        const data = req.body.orderItems
+        if(!orderId){
+            return res.status(200).json({
+                status: 'ERR',
+                message: 'No have ID of Order'
+            })
+        }
+        const response = await OrderService.cancelOrder(orderId, data)
+        return res.status(200).json(response)
+    } catch (e){
+        return res.status(404).json({
+            message: e
+        })
+    }
+}
 
 module.exports = {
     createOrder,
     getAllOrder,
     getOrderDetail,
-    getAllOrderAdmin
+    getAllOrderAdmin,
+    cancelOrder
 }
