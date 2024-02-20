@@ -171,11 +171,66 @@ const getAllOrderAdmin = (limit, page) => {
     })
 }
 
+const cancelOrder = (orderId, data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let order = []
+            const promises = data.map(async (order) => {
+                // Tìm và cập nhật sản phẩm
+                const productData = await Product.findOneAndUpdate(
+                    {
+                        _id: order.product,
+                        selled: { $gte: order.amount }
+                    },
+                    {
+                        $inc: {
+                            countInStock: +order.amount,
+                            selled: -order.amount
+                        }
+                    },
+                    { new: true }
+                )
+
+                if (productData) {
+                    // Nếu sản phẩm được cập nhật thành công
+                    // Xóa đơn hàng
+                    order = await Order.findByIdAndDelete(orderId)
+                    return {
+                        status: 'OK',
+                        message: 'SUCCESS'
+                    }
+                } else {
+                    // Nếu sản phẩm không được cập nhật thành công
+                    return {
+                        status: 'OK',
+                        message: 'Cancelling order unsuccess',
+                        id: order.product
+                    }
+                }
+            })
+
+            const results = await Promise.all(promises)
+            const newData = results && results.filter((item) => item.id)
+
+            if(newData) {
+                resolve({
+                    status: 'ERR',
+                    message: `Product have id: ${newData} not available`
+                })
+            }
+
+        } catch (e) {
+            // Xử lý lỗi nếu có
+            reject(e)
+        }
+    })
+}
 
 
 module.exports = {
     createOrder,
     getAllOrder,
     getOrderDetail,
-    getAllOrderAdmin
+    getAllOrderAdmin,
+    cancelOrder
 }
