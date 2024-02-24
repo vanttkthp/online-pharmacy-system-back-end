@@ -50,7 +50,7 @@ const loginUser = (userLogin)=> {
             if(checkUser===null){
                 resolve({
                     status: 'ok',
-                    message: 'khong ton tai mail'
+                    message: 'User is not exist !'
                 })
             }else{
                 const comparePassword = bcrypt.compareSync(password,checkUser.password)
