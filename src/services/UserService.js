@@ -11,8 +11,8 @@ const createUser = (newUser) => {
             })
             if(checkUser!=null){
                 resolve({
-                    status: 'ok',
-                    message: 'the email is already'
+                    status: 'ERR',
+                    message: 'The email is already exist'
                 })
             }else{
                 const hash = bcrypt.hashSync(password,10)
@@ -49,15 +49,15 @@ const loginUser = (userLogin)=> {
             })
             if(checkUser===null){
                 resolve({
-                    status: 'ok',
-                    message: 'khong ton tai mail'
+                    status: 'ERR',
+                    message: 'User is not exist !'
                 })
             }else{
                 const comparePassword = bcrypt.compareSync(password,checkUser.password)
                 if(!comparePassword){
                     resolve({
-                        status: 'ok',
-                        message: 'sai mk'
+                        status: 'ERR',
+                        message: 'Wrong password'
                     })
                 }else{
                     const access_token = await generalAccessToken({
@@ -90,7 +90,7 @@ const updateUser = (id, data)=> {
             })
             if(checkUser===null){
                 resolve({
-                    status: 'ok',
+                    status: 'ERR',
                     message: 'khong ton tai id'
                 })
             }else{
